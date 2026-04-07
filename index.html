@@ -345,7 +345,7 @@
                 voiceTimeout = setTimeout(() => {
                     recognition.stop();
                     searchManual();
-                }, 500);
+                }, 1200); // 1.2 segundos para mejor exactitud sin ser muy lento
             };
 
             recognition.onstart = () => {
