@@ -405,8 +405,10 @@
                     
                     json.forEach(row => {
                         const keys = Object.keys(row);
-                        const cK = keys.find(k => k.trim().toLowerCase() === 'codigo') || keys.find(k => /cod|id|bar/i.test(k)) || keys[0];
-                        const pK = keys.find(k => k.trim().toLowerCase() === 'precio') || keys.find(k => /pre|val|cost|monto/i.test(k)) || keys[1];
+                        // Se agregó 'cestilo' a la búsqueda de código
+                        const cK = keys.find(k => k.trim().toLowerCase() === 'codigo') || keys.find(k => /cod|id|bar|cestilo/i.test(k)) || keys[0];
+                        // Se agregó 'pv' a la búsqueda de precio
+                        const pK = keys.find(k => k.trim().toLowerCase() === 'precio') || keys.find(k => /pre|val|cost|monto|pv/i.test(k)) || keys[1];
 
                         const codeRaw = row[cK];
                         const priceRaw = row[pK];
@@ -614,13 +616,16 @@
         }
 
         function searchManual() {
-            let inp = document.getElementById('manual-code').value.trim().toUpperCase();
+            // Limpiamos espacios, puntos y signos del dictado antes de evaluar
+            let inp = document.getElementById('manual-code').value.toUpperCase().replace(/[^A-Z0-9]/g, '');
             
-            // Si solo son números, agregamos "MM" al inicio automáticamente
+            // Si después de limpiar nos quedan solo números, agregamos "MM" al inicio
             if (/^\d+$/.test(inp)) {
                 inp = "MM" + inp;
-                document.getElementById('manual-code').value = inp;
             }
+            
+            // Reflejamos en la interfaz lo que realmente va a buscar
+            document.getElementById('manual-code').value = inp;
             
             if (inp) findProduct(inp);
         }
